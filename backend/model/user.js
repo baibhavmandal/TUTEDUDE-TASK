@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   friends: [{ type: mongoose.SchemaTypes.ObjectId, ref: "User" }], // Explicitly reference "User" collection
-  interests: [{ type: String }], // String array for interests
+  interests: [{ type: String, default: [] }], // String array for interests
 });
 
 const User = mongoose.model("User", userSchema);

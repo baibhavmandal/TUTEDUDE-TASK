@@ -1,8 +1,21 @@
 import logger from "../utils/logger.js";
 
 const authorizeUser = (req, res, next) => {
-  logger.info(`Authorization Middleware running sucessfully`);
-  next();
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
+
+  try {
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decode;
+    next();
+  } catch (error) {
+    return res
+      .status(403)
+      .json({ message: "Forbidden: Invalid or expired token" });
+  }
 };
 
 export default authorizeUser;
